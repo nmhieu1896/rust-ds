@@ -1,19 +1,12 @@
 use std::vec;
 
-// #[derive(Debug)]
-// struct HeapNode {
-//     value: i32,
-//     left: Option<Box<HeapNode>>,
-//     right: Option<Box<HeapNode>>,
-// }
-
 pub fn _run() {
     println!("Hello, world!");
-    // let mut a = vec![10, 4, 25, 16, 10, 8, 11, 1];
-    // heapify(a);
+    let arr = vec![10, 4, 20, 16, 14, 8, 1, 12, 24, 9, 18];
+    let mut heap = heapify(arr);
 
-    // let mut heap = vec![1, 4, 10, 8, 16, 14, 20];
-    let mut heap = vec![1, 10, 4, 14, 20, 8, 16];
+    println!("heap: {:?}", heap);
+
     add_to_heap(&mut heap, 2);
     println!("heap: {:?}", heap);
     add_to_heap(&mut heap, 3);
@@ -38,17 +31,14 @@ fn shift(vec: &mut Vec<i32>) {
     heapify_down(vec, 0);
 }
 
-// fn heapify(mut arr: Vec<i32>) {
-//     let mut heap = vec![0; arr.len() + 1];
-//     for i in 0..arr.len() {
-//         heap[i + 1] = arr[i];
-//     }
-//     println!("{:?}", heap);
-//     for i in (1..heap.len()).rev() {
-//         heapify_up(&mut heap, i);
-//     }
-//     println!("{:?}", heap);
-// }
+fn heapify(arr: Vec<i32>) -> Vec<i32> {
+    let mut heap = arr.clone();
+    for i in 1..heap.len() {
+        heapify_up(&mut heap, i);
+    }
+
+    return heap;
+}
 
 fn heapify_up(heap: &mut Vec<i32>, i: usize) {
     let mut i = i;

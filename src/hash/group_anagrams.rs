@@ -9,16 +9,16 @@ pub fn _run() {
     let exp3 = to_vec_string(vec!["a"]);
     let test_cases = vec![exp1, exp2, exp3];
     for test_case in test_cases.iter() {
-        let result = group_anagrams(test_case.clone());
+        let result = _group_anagrams(test_case.clone());
         println!("result {:?}", result);
     }
     for test_case in test_cases.iter() {
-        let result = group_anagrams_2(test_case.clone());
+        let result = _group_anagrams_2(test_case.clone());
         println!("result {:?}", result);
     }
 }
 
-fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+fn _group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
     let mut map: HashMap<Vec<char>, Vec<String>> = hash_map::HashMap::new();
     for text in strs.iter() {
         let mut chars = text.clone().chars().collect::<Vec<char>>();
@@ -36,7 +36,7 @@ fn to_vec_string(vec: Vec<&str>) -> Vec<String> {
 
 const N_LETTERS: usize = (b'z' - b'a' + 1) as _;
 
-pub fn group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
+pub fn _group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
     strs.into_iter()
         .fold(
             HashMap::<[u8; N_LETTERS], Vec<String>>::new(),

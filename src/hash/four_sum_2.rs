@@ -6,11 +6,11 @@ pub fn _run() {
     let v3 = vec![-1, 2];
     let v4 = vec![0, 2];
 
-    let count = four_sum_count(v1, v2, v3, v4);
+    let count = _four_sum_count(v1, v2, v3, v4);
     println!("count {}", count);
 }
 
-pub fn four_sum_count(nums1: Vec<i32>, nums2: Vec<i32>, nums3: Vec<i32>, nums4: Vec<i32>) -> i32 {
+pub fn _four_sum_count(nums1: Vec<i32>, nums2: Vec<i32>, nums3: Vec<i32>, nums4: Vec<i32>) -> i32 {
     let mut map1 = HashMap::<i32, i32>::new();
 
     for &item_v1 in nums1.iter() {

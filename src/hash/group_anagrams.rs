@@ -4,9 +4,9 @@ use std::{
 };
 
 pub fn _run() {
-    let exp1 = to_vec_string(vec!["eat", "tea", "tan", "ate", "nat", "bat"]);
-    let exp2 = to_vec_string(vec![""]);
-    let exp3 = to_vec_string(vec!["a"]);
+    let exp1 = _to_vec_string(vec!["eat", "tea", "tan", "ate", "nat", "bat"]);
+    let exp2 = _to_vec_string(vec![""]);
+    let exp3 = _to_vec_string(vec!["a"]);
     let test_cases = vec![exp1, exp2, exp3];
     for test_case in test_cases.iter() {
         let result = _group_anagrams(test_case.clone());
@@ -30,19 +30,19 @@ fn _group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
     return result;
 }
 
-fn to_vec_string(vec: Vec<&str>) -> Vec<String> {
+fn _to_vec_string(vec: Vec<&str>) -> Vec<String> {
     return vec.iter().map(|s| s.to_string()).collect();
 }
 
-const N_LETTERS: usize = (b'z' - b'a' + 1) as _;
+const _N_LETTERS: usize = (b'z' - b'a' + 1) as _;
 
 pub fn _group_anagrams_2(strs: Vec<String>) -> Vec<Vec<String>> {
     strs.into_iter()
         .fold(
-            HashMap::<[u8; N_LETTERS], Vec<String>>::new(),
+            HashMap::<[u8; _N_LETTERS], Vec<String>>::new(),
             |mut map, s| {
                 let freqs = s.bytes().map(|b| (b - b'a') as usize).fold(
-                    [0; N_LETTERS],
+                    [0; _N_LETTERS],
                     |mut freqs, bin| {
                         freqs[bin] += 1;
                         freqs

@@ -5,32 +5,32 @@ pub fn _run() {
     // let arr = vec![10, 4, 20, 16, 14, 8, 1, 12, 24, 9, 18];
     let arr = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 1];
     _test_heap(arr.clone());
-    find_kth_smallest(arr, 5)
+    _find_kth_smallest(arr, 5)
 }
 
 pub fn _test_heap(arr: Vec<i32>) {
-    let mut heap = heapify(arr);
+    let mut heap = _heapify(arr);
     println!("heap: {:?}", heap);
-    print_heap(&heap);
+    _print_heap(&heap);
     // println!("heap: {:?}", heap);
 
-    // add_to_heap(&mut heap, 2);
+    // _add_to_heap(&mut heap, 2);
     // println!("heap: {:?}", heap);
-    // add_to_heap(&mut heap, 3);
+    // _add_to_heap(&mut heap, 3);
     // println!("heap: {:?}", heap);
-    // shift(&mut heap);
+    // _shift(&mut heap);
     // println!("heap: {:?}", heap);
-    shift(&mut heap);
+    _shift(&mut heap);
     // println!("heap: {:?}", heap);
 }
 
-fn add_to_heap(vec: &mut Vec<i32>, value: i32) {
+fn _add_to_heap(vec: &mut Vec<i32>, value: i32) {
     vec.push(value);
 
-    heapify_up(vec, vec.len() - 1);
+    _heapify_up(vec, vec.len() - 1);
 }
 
-fn print_heap(vec: &Vec<i32>) {
+fn _print_heap(vec: &Vec<i32>) {
     //         |--------------1                  || 14 n               => 15
     //         |----------/-------\              || 10 / 7 \           => 19
     //         |------2-------|-------3          || 6 n 15 n           => 23
@@ -112,24 +112,24 @@ fn print_heap(vec: &Vec<i32>) {
     }
 }
 
-fn shift(vec: &mut Vec<i32>) {
+fn _shift(vec: &mut Vec<i32>) {
     let len = vec.len();
     vec.swap(0, len - 1);
     vec.remove(len - 1);
 
-    heapify_down(vec, 0);
+    _heapify_down(vec, 0);
 }
 
-fn heapify(arr: Vec<i32>) -> Vec<i32> {
+fn _heapify(arr: Vec<i32>) -> Vec<i32> {
     let mut heap = arr.clone();
     for i in 1..heap.len() {
-        heapify_up(&mut heap, i);
+        _heapify_up(&mut heap, i);
     }
 
     return heap;
 }
 
-fn heapify_up(heap: &mut Vec<i32>, i: usize) {
+fn _heapify_up(heap: &mut Vec<i32>, i: usize) {
     let mut i = i;
     while i > 1 {
         let parent = (i - 1) / 2;
@@ -140,7 +140,7 @@ fn heapify_up(heap: &mut Vec<i32>, i: usize) {
     }
 }
 
-fn heapify_down(heap: &mut Vec<i32>, i: usize) {
+fn _heapify_down(heap: &mut Vec<i32>, i: usize) {
     let mut i = i;
     while i < heap.len() {
         let left = i * 2;
@@ -188,11 +188,11 @@ fn _heapify_down_v2(heap: &mut Vec<i32>, i: usize) {
     }
 }
 
-fn find_kth_smallest(arr: Vec<i32>, k: usize) {
-    let mut heap = heapify(arr);
+fn _find_kth_smallest(arr: Vec<i32>, k: usize) {
+    let mut heap = _heapify(arr);
     println!("heap: {:?}", heap);
     for _ in 0..k - 1 {
-        shift(&mut heap);
+        _shift(&mut heap);
     }
     println!("Kth smallest: {:?}", heap[0]);
 }

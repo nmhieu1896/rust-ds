@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct FenwickTree {
     arr: Vec<i32>,
@@ -6,6 +7,7 @@ pub struct FenwickTree {
 
 #[derive(Debug)]
 pub struct FenwickArr(Vec<i32>);
+#[allow(dead_code)]
 impl FenwickArr {
     pub fn sum_at(&self, idx: usize) -> i32 {
         // sum by the binary representation of idx
@@ -24,6 +26,7 @@ impl FenwickArr {
     }
 }
 
+#[allow(dead_code)]
 impl FenwickTree {
     pub fn new(origin_arr: Vec<i32>) -> FenwickTree {
         let mut prefix_arr: FenwickArr = FenwickArr(vec![0; origin_arr.len() + 1]);

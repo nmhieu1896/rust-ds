@@ -8,6 +8,8 @@ pub struct FenwickTree {
 pub struct FenwickArr(Vec<i32>);
 impl FenwickArr {
     pub fn sum_at(&self, idx: usize) -> i32 {
+        // sum by the binary representation of idx
+        // for example, sum_at idx 7 (111) is sum of idx 7(111) + idx 6(110) + idx 4(100)
         let mut sum = 0;
         let mut from = idx;
         loop {

@@ -39,6 +39,18 @@ impl List {
     }
 }
 
+impl Drop for List {
+    // Self impl to avoid blowing the stack
+    // by recursively call nested drop of list of Box(Node)
+    fn drop(&mut self) {
+        let mut curr_link = mem::replace(&mut self.head, Link::Empty);
+        while let Link::More(mut box_node) = curr_link {
+            curr_link = mem::replace(&mut box_node.next, Link::Empty)
+            // box_node goes out of scope and gets dropped
+        }
+    }
+}
+
 impl fmt::Debug for List {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut fmt_str = "".to_string();

@@ -1,5 +1,4 @@
 use std::fmt;
-use std::mem;
 
 struct Node {
     elem: i32,
@@ -37,9 +36,9 @@ impl Drop for List {
     // Self impl to avoid blowing the stack
     // by recursively call nested drop of list of Box(Node)
     fn drop(&mut self) {
-        let mut curr_link = mem::replace(&mut self.head, None);
+        let mut curr_link = self.head.take();
         while let Some(mut box_node) = curr_link {
-            curr_link = mem::replace(&mut box_node.next, None)
+            curr_link = box_node.next.take()
             // box_node goes out of scope and gets dropped
         }
     }

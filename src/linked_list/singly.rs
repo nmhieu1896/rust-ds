@@ -3,35 +3,29 @@ use std::mem;
 
 struct Node {
     elem: i32,
-    next: Link,
+    next: Option<Box<Node>>,
 }
 
-enum Link {
-    Empty,
-    More(Box<Node>),
-}
-// pub Enum cant have private Node => we need to wrap it in a struct
 pub struct List {
-    head: Link,
+    head: Option<Box<Node>>,
 }
 
 impl List {
     pub fn new() -> Self {
-        List { head: Link::Empty }
+        List { head: None }
     }
 
     pub fn push(&mut self, elem: i32) {
         let new_node = Node {
             elem: elem,
-            next: mem::replace(&mut self.head, Link::Empty),
+            next: self.head.take(),
         };
-        self.head = Link::More(Box::new(new_node));
+        self.head = Some(Box::new(new_node));
     }
     pub fn pop(&mut self) -> Option<i32> {
-        // match &self.head {
-        match mem::replace(&mut self.head, Link::Empty) {
-            Link::Empty => None,
-            Link::More(node) => {
+        match self.head.take() {
+            None => None,
+            Some(node) => {
                 self.head = node.next;
                 Some(node.elem)
             }
@@ -43,9 +37,9 @@ impl Drop for List {
     // Self impl to avoid blowing the stack
     // by recursively call nested drop of list of Box(Node)
     fn drop(&mut self) {
-        let mut curr_link = mem::replace(&mut self.head, Link::Empty);
-        while let Link::More(mut box_node) = curr_link {
-            curr_link = mem::replace(&mut box_node.next, Link::Empty)
+        let mut curr_link = mem::replace(&mut self.head, None);
+        while let Some(mut box_node) = curr_link {
+            curr_link = mem::replace(&mut box_node.next, None)
             // box_node goes out of scope and gets dropped
         }
     }
@@ -55,16 +49,16 @@ impl fmt::Debug for List {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut fmt_str = "".to_string();
         match self.head {
-            Link::Empty => {
+            None => {
                 fmt_str = "Empty".to_string();
             }
-            Link::More(ref node) => {
+            Some(ref node) => {
                 fmt_str.push_str(&format!("Node({:?})", node.elem));
                 let mut next = &node.next;
                 loop {
                     match next {
-                        Link::Empty => break,
-                        Link::More(ref node) => {
+                        None => break,
+                        Some(ref node) => {
                             fmt_str.push_str(&format!("->Node({:?})", node.elem));
                             next = &node.next;
                         }

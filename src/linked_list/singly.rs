@@ -1,27 +1,27 @@
 use std::fmt;
 
-struct Node {
-    elem: i32,
-    next: Option<Box<Node>>,
+struct Node<T> {
+    elem: T,
+    next: Option<Box<Node<T>>>,
 }
 
-pub struct List {
-    head: Option<Box<Node>>,
+pub struct List<T> {
+    head: Option<Box<Node<T>>>,
 }
 
-impl List {
+impl<T> List<T> {
     pub fn new() -> Self {
         List { head: None }
     }
 
-    pub fn push(&mut self, elem: i32) {
+    pub fn push(&mut self, elem: T) {
         let new_node = Node {
             elem: elem,
             next: self.head.take(),
         };
         self.head = Some(Box::new(new_node));
     }
-    pub fn pop(&mut self) -> Option<i32> {
+    pub fn pop(&mut self) -> Option<T> {
         match self.head.take() {
             None => None,
             Some(node) => {
@@ -30,9 +30,15 @@ impl List {
             }
         }
     }
+    pub fn peek(&self) -> Option<&T> {
+        self.head.as_ref().map(|node| &node.elem)
+    }
+    pub fn peek_mut(&mut self) -> Option<&mut T> {
+        self.head.as_mut().map(|node| &mut node.elem)
+    }
 }
 
-impl Drop for List {
+impl<T> Drop for List<T> {
     // Self impl to avoid blowing the stack
     // by recursively call nested drop of list of Box(Node)
     fn drop(&mut self) {
@@ -44,7 +50,10 @@ impl Drop for List {
     }
 }
 
-impl fmt::Debug for List {
+impl<T> fmt::Debug for List<T>
+where
+    T: fmt::Debug,
+{
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut fmt_str = "".to_string();
         match self.head {
@@ -70,7 +79,7 @@ impl fmt::Debug for List {
 }
 
 pub fn _run() {
-    let mut list = List::new();
+    let mut list = List::<i32>::new();
     list.push(1);
     list.push(2);
     list.push(5);
@@ -78,4 +87,10 @@ pub fn _run() {
     println!("{:?}", list);
     list.pop();
     println!("{:?}", list);
+    let head = list.peek();
+    println!("Head: {:?}", head);
+    list.peek_mut().map(|node| {
+        *node *= 4;
+    });
+    println!("List After mut: {:?}", list);
 }

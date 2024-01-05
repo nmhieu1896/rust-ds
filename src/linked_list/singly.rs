@@ -50,6 +50,37 @@ impl<T> Drop for List<T> {
     }
 }
 
+impl<T> Iterator for List<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.pop()
+    }
+}
+
+pub fn _run() {
+    let mut list = List::<i32>::new();
+    list.push(1);
+    list.push(2);
+    list.push(5);
+    list.push(3);
+    println!("{:?}", list);
+    list.pop();
+    println!("{:?}", list);
+    let head = list.peek();
+    println!("Head: {:?}", head);
+    list.peek_mut().map(|node| {
+        *node *= 4;
+    });
+    println!("List After mut: {:?}", list);
+
+    let mut idx = 0;
+    list.into_iter().for_each(|e| {
+        idx += 1;
+        println!("item {}: {:?}", idx, e)
+    });
+}
+
+// -- debug
 impl<T> fmt::Debug for List<T>
 where
     T: fmt::Debug,
@@ -76,21 +107,4 @@ where
         }
         write!(f, "{}", fmt_str)
     }
-}
-
-pub fn _run() {
-    let mut list = List::<i32>::new();
-    list.push(1);
-    list.push(2);
-    list.push(5);
-    list.push(3);
-    println!("{:?}", list);
-    list.pop();
-    println!("{:?}", list);
-    let head = list.peek();
-    println!("Head: {:?}", head);
-    list.peek_mut().map(|node| {
-        *node *= 4;
-    });
-    println!("List After mut: {:?}", list);
 }

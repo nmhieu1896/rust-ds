@@ -2,16 +2,26 @@ use std::fmt;
 
 struct Node<T> {
     elem: T,
-    next: Option<Box<Node<T>>>,
+    next: Link<T>,
 }
 
+type Link<T> = Option<Box<Node<T>>>;
+
 pub struct List<T> {
-    head: Option<Box<Node<T>>>,
+    head: Link<T>,
 }
 
 impl<T> List<T> {
     pub fn new() -> Self {
         List { head: None }
+    }
+    pub fn iter(&self) -> Iter<T> {
+        Iter {
+            next: self.head.as_deref(),
+        }
+    }
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
     }
 
     pub fn push(&mut self, elem: T) {
@@ -50,10 +60,25 @@ impl<T> Drop for List<T> {
     }
 }
 
-impl<T> Iterator for List<T> {
+pub struct IntoIter<T>(List<T>);
+impl<T> Iterator for IntoIter<T> {
     type Item = T;
     fn next(&mut self) -> Option<Self::Item> {
-        self.pop()
+        self.0.pop()
+    }
+}
+
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
+}
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map(|node| {
+            self.next = node.next.as_deref().map(|node| &*node);
+            &node.elem
+        })
     }
 }
 
@@ -74,6 +99,10 @@ pub fn _run() {
     println!("List After mut: {:?}", list);
 
     let mut idx = 0;
+    list.iter().for_each(|e| {
+        idx += 1;
+        println!("item_iter {}: {:?}", idx, e)
+    });
     list.into_iter().for_each(|e| {
         idx += 1;
         println!("item {}: {:?}", idx, e)

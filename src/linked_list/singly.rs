@@ -20,6 +20,11 @@ impl<T> List<T> {
             next: self.head.as_deref(),
         }
     }
+    pub fn iter_mut(&mut self) -> IterMut<T> {
+        IterMut {
+            next: self.head.as_deref_mut(),
+        }
+    }
     pub fn into_iter(self) -> IntoIter<T> {
         IntoIter(self)
     }
@@ -82,6 +87,19 @@ impl<'a, T> Iterator for Iter<'a, T> {
     }
 }
 
+pub struct IterMut<'a, T> {
+    next: Option<&'a mut Node<T>>,
+}
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.take().map(|node| {
+            self.next = node.next.as_deref_mut();
+            &mut node.elem
+        })
+    }
+}
+
 pub fn _run() {
     let mut list = List::<i32>::new();
     list.push(1);
@@ -103,6 +121,12 @@ pub fn _run() {
         idx += 1;
         println!("item_iter {}: {:?}", idx, e)
     });
+    idx = 0;
+    list.iter_mut().for_each(|e| {
+        idx += 1;
+        println!("item_iter_mut {}: {:?}", idx, e)
+    });
+    idx = 0;
     list.into_iter().for_each(|e| {
         idx += 1;
         println!("item {}: {:?}", idx, e)

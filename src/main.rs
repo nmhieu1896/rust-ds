@@ -12,7 +12,8 @@ fn main() {
     // hash::int_to_roman::_run();
     // bit_wise::_run();
     // fenwick_tree::_run();
-    pointers::_run();
+    // pointers::_run();
+    // pointers::mut_pointers::_run();
 
-    // linked_list::singly::_run();
+    linked_list::singly::_run();
 }

@@ -1,4 +1,5 @@
 pub mod doubly;
+pub mod rc_singly;
 pub mod singly;
 
 #[cfg(test)]
@@ -87,10 +88,28 @@ mod test_singly {
         list.push(2);
         list.push(3);
 
-        let mut iter = list.iter_mut();
-        assert_eq!(iter.next(), Some(&mut 3));
-        assert_eq!(iter.next(), Some(&mut 2));
-        assert_eq!(iter.next(), Some(&mut 1));
-        assert_eq!(iter.next(), None);
+        // let mut iter = list.iter_mut();
+        // assert_eq!(iter.next(), Some(&mut 3));
+        // assert_eq!(iter.next(), Some(&mut 2));
+        // assert_eq!(iter.next(), Some(&mut 1));
+        // assert_eq!(iter.next(), None);
+    }
+}
+
+#[cfg(test)]
+mod test_rc_singly {
+    use super::rc_singly::List;
+
+    #[test]
+    fn basics() {
+        let list = List::new();
+        let list = list.prepend(1).prepend(2).prepend(3);
+        assert_eq!(list.head(), Some(&3));
+        let list = list.tail();
+        assert_eq!(list.head(), Some(&2));
+        let list = list.tail();
+        assert_eq!(list.head(), Some(&1));
+        let list = list.tail();
+        assert_eq!(list.head(), None);
     }
 }

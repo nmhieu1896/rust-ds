@@ -1,3 +1,4 @@
+mod binary_tree;
 mod bit_wise;
 mod fenwick_tree;
 mod hash;
@@ -16,5 +17,7 @@ fn main() {
     // pointers::mut_pointers::_run();
 
     // linked_list::singly::_run();
-    linked_list::rc_singly::_run();
+    // linked_list::rc_singly::_run();
+
+    binary_tree::_run();
 }

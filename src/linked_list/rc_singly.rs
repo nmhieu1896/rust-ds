@@ -1,24 +1,19 @@
 use std::{fmt, rc::Rc};
 
+pub struct List<T> {
+    head: Link<T>,
+}
+
+type Link<T> = Option<Rc<Node<T>>>;
+
 struct Node<T> {
     elem: T,
     next: Link<T>,
 }
 
-type Link<T> = Option<Rc<Node<T>>>;
-
-pub struct List<T> {
-    head: Link<T>,
-}
-
 impl<T> List<T> {
     pub fn new() -> Self {
         List { head: None }
-    }
-
-    pub fn head(&self) -> Option<&T> {
-        let x = self.head.as_deref();
-        x.map(|v| &v.elem)
     }
 
     pub fn prepend(&self, elem: T) -> List<T> {
@@ -33,7 +28,16 @@ impl<T> List<T> {
     pub fn tail(&self) -> List<T> {
         List {
             head: self.head.as_ref().and_then(|node| node.next.clone()),
-            // head: self.head.as_ref().map(|node| node.next.clone()),
+        }
+    }
+
+    pub fn head(&self) -> Option<&T> {
+        self.head.as_ref().map(|node| &node.elem)
+    }
+
+    pub fn iter(&self) -> Iter<'_, T> {
+        Iter {
+            next: self.head.as_deref(),
         }
     }
 }
@@ -51,13 +55,19 @@ impl<T> Drop for List<T> {
     }
 }
 
-pub fn _run() {
-    let list = List::new();
-    let list = list.prepend(1).prepend(2).prepend(3);
-    println!("{:?}", list);
-    println!("{:?}", list.head());
-    let list = list.tail();
-    println!("{:?}", list);
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map(|node| {
+            self.next = node.next.as_deref();
+            &node.elem
+        })
+    }
 }
 
 // -- debug

@@ -16,8 +16,8 @@ fn main() {
     // pointers::_run();
     // pointers::mut_pointers::_run();
 
-    // linked_list::singly::_run();
+    linked_list::singly::_run();
     // linked_list::rc_singly::_run();
 
-    binary_tree::_run();
+    // binary_tree::_run();
 }

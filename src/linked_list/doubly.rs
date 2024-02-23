@@ -1,6 +1,5 @@
-use std::borrow::Borrow;
 use std::cell::RefCell;
-use std::fmt;
+// use std::fmt;
 use std::rc::Rc;
 
 #[derive(Debug)]
@@ -50,14 +49,38 @@ impl<T> List<T> {
             }
         }
     }
+    pub fn pop_front(&mut self) -> Option<T> {
+        self.head.take().map(|old_head| {
+            match old_head.borrow_mut().next.take() {
+                Some(new_head) => {
+                    new_head.borrow_mut().prev.take();
+                    self.head = Some(new_head)
+                }
+                None => {
+                    self.tail.take();
+                }
+            }
+
+            Rc::try_unwrap(old_head).ok().unwrap().into_inner().elem
+        })
+    }
 }
 
 pub fn _run() {
     let mut list = List::<i32>::new();
     list.push_front(1);
+    println!("{:?}", list);
     list.push_front(2);
     list.push_front(5);
     list.push_front(3);
+    let pop_value = list.pop_front();
+    println!("{:?}", pop_value);
+    let pop_value = list.pop_front();
+    println!("{:?}", pop_value);
+    let pop_value = list.pop_front();
+    println!("{:?}", pop_value);
+    let pop_value = list.pop_front();
+    println!("{:?}", pop_value);
     println!("{:?}", list);
 }
 

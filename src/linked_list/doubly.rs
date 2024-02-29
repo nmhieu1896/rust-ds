@@ -1,4 +1,5 @@
-use std::cell::RefCell;
+use std::cell::{Ref, RefCell};
+use std::fmt::Debug;
 // use std::fmt;
 use std::rc::Rc;
 
@@ -39,12 +40,12 @@ impl<T> List<T> {
         let new_node = Node::new(value);
         match self.head.take() {
             Some(old_head) => {
-                old_head.borrow_mut().prev = Some(new_node.clone());
+                old_head.borrow_mut().prev = Some(Rc::clone(&new_node));
                 new_node.borrow_mut().next = Some(old_head);
                 self.head = Some(new_node)
             }
             None => {
-                self.head = Some(new_node.clone());
+                self.head = Some(Rc::clone(&new_node));
                 self.tail = Some(new_node);
             }
         }
@@ -64,6 +65,12 @@ impl<T> List<T> {
             Rc::try_unwrap(old_head).ok().unwrap().into_inner().elem
         })
     }
+
+    pub fn peek(&self) -> Option<Ref<T>> {
+        self.head
+            .as_ref()
+            .map(|node| Ref::map(node.borrow(), |node| &node.elem))
+    }
 }
 
 impl<T> Drop for List<T> {
@@ -79,6 +86,8 @@ pub fn _run() {
     list.push_front(2);
     list.push_front(5);
     list.push_front(3);
+    println!("{:?}", list.peek());
+    println!("{:?}", list);
     let pop_value = list.pop_front();
     println!("{:?}", pop_value);
     let pop_value = list.pop_front();
@@ -106,17 +115,26 @@ pub fn _run() {
 //                 // let next = node.borrow_mut().next.clone();
 //                 // implement debug so that it will print
 //                 // Node(1) <-> Node(2) <-> Node(5) <-> Node(3)
-//                 let mut next = &node.borrow_mut();
-//                 let mut gg = node.clone();
+//                 // let mut next = node.borrow_mut();
+
+//                 let mut next = Rc::clone(node);
 //                 loop {
-//                     match next.next {
+//                     let current = next.borrow();
+//                     match current.next {
 //                         None => break,
 //                         Some(ref node) => {
-//                             // fmt_str.push_str(&format!("<->Node({:?})", node.borrow_mut().elem));
-//                             gg = node.clone();
-//                             next = &gg.borrow_mut();
+//                             fmt_str.push_str(&format!("<->Node({:?})", node.borrow().elem));
+//                             // gg = node.clone();
+//                             // next = node.borrow_mut();
 //                         }
 //                     }
+//                     let abc = Rc::clone(&next);
+//                     let xyz = &abc.borrow().next;
+//                     if let Some(gg) = xyz {
+//                         next = Rc::clone(gg);
+//                     } else {
+//                         break;
+//                     };
 //                 }
 //             }
 //         }

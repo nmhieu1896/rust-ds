@@ -66,6 +66,21 @@ impl<T> List<T> {
         })
     }
 
+    pub fn push_tail(&mut self, elem: T) {
+        let new_tail = Node::new(elem);
+        match self.tail.take() {
+            Some(old_tail) => {
+                old_tail.borrow_mut().next = Some(new_tail.clone());
+                new_tail.borrow_mut().prev = Some(old_tail);
+                self.tail = Some(new_tail);
+            }
+            None => {
+                self.head = Some(new_tail.clone());
+                self.tail = Some(new_tail);
+            }
+        }
+    }
+
     pub fn peek(&self) -> Option<Ref<T>> {
         self.head
             .as_ref()
@@ -87,7 +102,6 @@ pub fn _run() {
     list.push_front(5);
     list.push_front(3);
     println!("{:?}", list.peek());
-    println!("{:?}", list);
     let pop_value = list.pop_front();
     println!("{:?}", pop_value);
     let pop_value = list.pop_front();

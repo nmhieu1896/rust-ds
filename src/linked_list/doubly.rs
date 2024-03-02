@@ -66,7 +66,7 @@ impl<T> List<T> {
         })
     }
 
-    pub fn push_tail(&mut self, elem: T) {
+    pub fn push_back(&mut self, elem: T) {
         let new_tail = Node::new(elem);
         match self.tail.take() {
             Some(old_tail) => {
@@ -79,6 +79,21 @@ impl<T> List<T> {
                 self.tail = Some(new_tail);
             }
         }
+    }
+
+    pub fn pop_back(&mut self) -> Option<T> {
+        self.tail.take().map(|old_tail| {
+            match old_tail.borrow_mut().prev.take() {
+                Some(new_tail) => {
+                    new_tail.borrow_mut().next.take();
+                    self.tail = Some(new_tail);
+                }
+                None => {
+                    self.head.take();
+                }
+            }
+            Rc::try_unwrap(old_tail).ok().unwrap().into_inner().elem
+        })
     }
 
     pub fn peek(&self) -> Option<Ref<T>> {

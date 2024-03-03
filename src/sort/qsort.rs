@@ -9,13 +9,7 @@ pub fn _run() {
 
 #[allow(dead_code)]
 fn qsort(mut vec: Vec<i32>) -> Vec<i32> {
-    //Handling base case for length <=2
-    if vec.len() == 2 {
-        if vec[0] > vec[1] {
-            (vec[0], vec[1]) = (vec[1], vec[0]);
-        }
-        return vec;
-    }
+    //Handling base case for length <2
     if vec.len() < 2 {
         return vec;
     }

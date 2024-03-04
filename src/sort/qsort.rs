@@ -1,17 +1,17 @@
 pub fn _run() {
-    let x = vec![
+    let mut x = vec![
         43, 1232, 12, 42, 67, 9, 20, 753, 58, 24, 57, 87, 5, 23, 46, 19, 46, 123, 41,
     ];
-    let x = qsort(x);
+    qsort(&mut x);
 
     println!("{:?}", x)
 }
 
 #[allow(dead_code)]
-fn qsort(mut vec: Vec<i32>) -> Vec<i32> {
+fn qsort(vec: &mut [i32]) {
     //Handling base case for length <2
     if vec.len() < 2 {
-        return vec;
+        return;
     }
 
     // pick last item as pivot
@@ -26,25 +26,18 @@ fn qsort(mut vec: Vec<i32>) -> Vec<i32> {
         if vec[i] < pivot {
             ptr = if ptr == vec.len() { 0 } else { ptr + 1 };
             if vec[i] < vec[ptr] {
-                (vec[i], vec[ptr]) = (vec[ptr], vec[i]);
+                vec.swap(i, ptr);
             }
             continue;
         }
     }
 
     // if ptr is still the init value (similar to -1), set it to 0
-    if ptr == last_idx + 1 {
-        ptr = 0;
-    } else {
-        ptr = ptr + 1;
-    }
-    (vec[last_idx], vec[ptr]) = (vec[ptr], vec[last_idx]);
+    ptr = if ptr == last_idx + 1 { 0 } else { ptr + 1 };
+    vec.swap(ptr, last_idx);
 
-    return qsort(vec[0..ptr].to_vec())
-        .into_iter()
-        .chain(vec![pivot].into_iter())
-        .chain(qsort(vec[ptr + 1..].to_vec()).into_iter())
-        .collect();
+    qsort(&mut vec[0..ptr]);
+    qsort(&mut vec[ptr + 1..]);
 }
 
 #[cfg(test)]
@@ -53,10 +46,10 @@ mod test_qsort {
 
     #[test]
     fn test_qsort1() {
-        let x = vec![
+        let mut x = vec![
             43, 1232, 12, 42, 67, 9, 20, 753, 58, 24, 57, 87, 5, 23, 46, 19, 46, 123, 41,
         ];
-        let x = qsort(x);
+        qsort(&mut x);
         assert_eq!(
             x,
             vec![5, 9, 12, 19, 20, 23, 24, 41, 42, 43, 46, 46, 57, 58, 67, 87, 123, 753, 1232]
@@ -64,24 +57,24 @@ mod test_qsort {
     }
     #[test]
     fn test_qsort2() {
-        let x = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
-        let x = qsort(x);
+        let mut x = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
+        qsort(&mut x);
         assert_eq!(x, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
     }
     #[test]
     fn test_qsort3() {
-        let x = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];
-        let x = qsort(x);
+        let mut x = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];
+        qsort(&mut x);
         assert_eq!(x, vec![1, 2, 3, 4, 5, 6, 7, 8, 9]);
     }
     // test vec of random chaos vector with negative number
     #[test]
     fn test_qsort4() {
-        let x = vec![
+        let mut x = vec![
             43, 1232, 12, 42, 67, 9, 20, 753, 58, 24, 57, 87, 5, 23, 46, 19, 46, 123, 41, -1, -2,
             -3, -4, -5, -6, -7, -8, -9,
         ];
-        let x = qsort(x);
+        qsort(&mut x);
         assert_eq!(
             x,
             vec![

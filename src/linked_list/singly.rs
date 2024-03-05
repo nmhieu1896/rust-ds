@@ -11,6 +11,7 @@ pub struct List<T> {
     head: Link<T>,
 }
 
+#[allow(dead_code)]
 impl<T> List<T> {
     pub fn new() -> Self {
         List { head: None }

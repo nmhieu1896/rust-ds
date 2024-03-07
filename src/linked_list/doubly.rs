@@ -36,6 +36,10 @@ impl<T> List<T> {
         }
     }
 
+    pub fn into_iter(self) -> IntoIter<T> {
+        IntoIter(self)
+    }
+
     pub fn push_front(&mut self, value: T) {
         let new_node = Node::new(value);
         match self.head.take() {
@@ -109,6 +113,15 @@ impl<T> Drop for List<T> {
     }
 }
 
+pub struct IntoIter<T>(List<T>);
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0.pop_front()
+    }
+}
+
 pub fn _run() {
     let mut list = List::<i32>::new();
     list.push_front(1);
@@ -126,6 +139,12 @@ pub fn _run() {
     let pop_value = list.pop_front();
     println!("{:?}", pop_value);
     println!("{:?}", list);
+    let mut list = List::<i32>::new();
+    list.push_front(2);
+    list.push_front(5);
+    list.push_front(3);
+    list.into_iter()
+        .for_each(|item| println!("iter_item: {:?}", item));
 }
 
 // -- debug

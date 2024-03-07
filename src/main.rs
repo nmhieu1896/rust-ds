@@ -19,7 +19,7 @@ fn main() {
 
     // linked_list::singly::_run();
     // linked_list::rc_singly::_run();
-    // linked_list::doubly::_run();
+    linked_list::doubly::_run();
     // sort::qsort::_run()
 
     // binary_tree::_run();

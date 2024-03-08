@@ -105,6 +105,11 @@ impl<T> List<T> {
             .as_ref()
             .map(|node| Ref::map(node.borrow(), |node| &node.elem))
     }
+    pub fn tail(&self) -> Option<Ref<T>> {
+        self.tail
+            .as_ref()
+            .map(|node| Ref::map(node.borrow(), |node| &node.elem))
+    }
 }
 
 impl<T> Drop for List<T> {
@@ -134,15 +139,18 @@ pub fn _run() {
     println!("{:?}", pop_value);
     let pop_value = list.pop_front();
     println!("{:?}", pop_value);
-    let pop_value = list.pop_front();
+    let pop_value = list.pop_back();
     println!("{:?}", pop_value);
-    let pop_value = list.pop_front();
+    let pop_value = list.pop_back();
     println!("{:?}", pop_value);
     println!("{:?}", list);
     let mut list = List::<i32>::new();
     list.push_front(2);
     list.push_front(5);
     list.push_front(3);
+    list.push_back(7);
+    list.push_back(8);
+    list.push_back(9);
     list.into_iter()
         .for_each(|item| println!("iter_item: {:?}", item));
 }

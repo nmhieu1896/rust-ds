@@ -125,3 +125,49 @@ mod test_rc_singly {
         assert_eq!(iter.next(), Some(&1));
     }
 }
+
+#[cfg(test)]
+mod test_doubly_list {
+    use super::doubly;
+
+    #[test]
+    fn test_push_pop() {
+        let mut list = doubly::List::<i32>::new();
+        list.push_front(1);
+        list.push_front(2);
+        list.push_front(3);
+        list.push_back(4);
+        list.push_back(5);
+        list.push_back(6);
+        //test peak and pop front
+        assert_eq!(*list.peek().unwrap(), 3);
+        list.pop_front();
+        assert_eq!(*list.peek().unwrap(), 2);
+        list.pop_front();
+        assert_eq!(*list.peek().unwrap(), 1);
+        //test tail and pop back
+        assert_eq!(*list.tail().unwrap(), 6);
+        list.pop_back();
+        assert_eq!(*list.tail().unwrap(), 5);
+        list.pop_back();
+        assert_eq!(*list.tail().unwrap(), 4);
+    }
+
+    #[test]
+    fn test_iter() {
+        let mut list = doubly::List::<i32>::new();
+        list.push_front(1);
+        list.push_front(2);
+        list.push_front(3);
+        list.push_back(4);
+        list.push_back(5);
+        list.push_back(6);
+        let mut iter = list.into_iter();
+        assert_eq!(iter.next().unwrap(), 3);
+        assert_eq!(iter.next().unwrap(), 2);
+        assert_eq!(iter.next().unwrap(), 1);
+        assert_eq!(iter.next().unwrap(), 4);
+        assert_eq!(iter.next().unwrap(), 5);
+        assert_eq!(iter.next().unwrap(), 6);
+    }
+}

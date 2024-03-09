@@ -1,5 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 struct TreeNode {
     val: i32,
@@ -9,6 +10,7 @@ struct TreeNode {
 
 type TreeNodeRef = Rc<RefCell<TreeNode>>;
 
+#[allow(dead_code)]
 impl TreeNode {
     fn new(val: i32) -> Self {
         TreeNode {

@@ -28,6 +28,7 @@ impl<T> Node<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T> List<T> {
     pub fn new() -> Self {
         List {
@@ -129,22 +130,7 @@ impl<T> Iterator for IntoIter<T> {
 
 pub fn _run() {
     let mut list = List::<i32>::new();
-    list.push_front(1);
-    println!("{:?}", list);
-    list.push_front(2);
-    list.push_front(5);
-    list.push_front(3);
-    println!("{:?}", list.peek());
-    let pop_value = list.pop_front();
-    println!("{:?}", pop_value);
-    let pop_value = list.pop_front();
-    println!("{:?}", pop_value);
-    let pop_value = list.pop_back();
-    println!("{:?}", pop_value);
-    let pop_value = list.pop_back();
-    println!("{:?}", pop_value);
-    println!("{:?}", list);
-    let mut list = List::<i32>::new();
+
     list.push_front(2);
     list.push_front(5);
     list.push_front(3);

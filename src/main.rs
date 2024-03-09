@@ -5,6 +5,7 @@ mod hash;
 mod heap;
 mod linked_list;
 mod pointers;
+mod smart_pointers;
 mod sort;
 
 fn main() {

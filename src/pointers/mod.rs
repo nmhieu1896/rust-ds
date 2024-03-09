@@ -66,7 +66,7 @@ mod test_pointers {
     #[test]
     fn basic_pointers() {
         let x = 5;
-        let mut mut_x = 5;
+        let mut_x = 5;
         let ref_x = &x;
         let box_x = Box::new(x);
         let mybox_x = MyBox::new(x);

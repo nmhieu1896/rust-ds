@@ -41,7 +41,10 @@ impl<T> RefCell<T> {
     pub fn borrow_mut(&self) -> Option<&mut T> {
         match self.state.get() {
             ShareType::Shared(_) | ShareType::Exclusive => None,
-            ShareType::Unshared => Some(unsafe { &mut *self.value.get() }),
+            ShareType::Unshared => {
+                self.state.set(ShareType::Exclusive);
+                Some(unsafe { &mut *self.value.get() })
+            }
         }
     }
 }
@@ -66,10 +69,12 @@ mod test_refcell {
     #[test]
     pub fn test_mut_borrow() {
         let x = RefCell::new(10);
-        let y = x.borrow_mut().unwrap();
-        let z = x.borrow_mut().unwrap();
-        assert_eq!(z, y);
-        *y = 15;
-        assert_eq!(x.borrow().unwrap(), &15)
+        let y = x.borrow_mut();
+        let z = x.borrow_mut();
+        assert_eq!(y, Some(&mut 10));
+        assert_eq!(z, None);
+        *y.unwrap() = 15;
+        // assert_eq!(x.borrow().unwrap(), &15)
+        assert!(x.borrow().is_none());
     }
 }

@@ -41,6 +41,20 @@ impl<T> Deref for Rc<T> {
     }
 }
 
+impl<T> Drop for Rc<T> {
+    fn drop(&mut self) {
+        let inner = unsafe { &*self.inner };
+        let c = inner.ref_count.get();
+        if c == 1 {
+            drop(inner);
+            drop(self.inner)
+            // let _ = Box::from_raw(self.inner);
+        } else {
+            inner.ref_count.set(c - 1);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

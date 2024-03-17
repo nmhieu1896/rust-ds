@@ -17,26 +17,19 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
             return -1;
         }
 
-        //mid item belong to smaller range
-        if nums[mid] < pivot {
-            // target in bigger range
-            if target > pivot {
-                right = mid;
-            } else if target > nums[mid] {
-                left = mid;
-            } else {
-                right = mid;
-            }
-        //mid item belong to bigger range
+        // mid item belong to smaller range
+        // meanwhile target in bigger range
+        if nums[mid] < pivot && target > pivot {
+            right = mid;
+        // mid item belong to bigger range
+        // meanwhile  target in smaller range
+        } else if nums[mid] > pivot && target < pivot {
+            left = mid;
+        //Normal case for binary search
+        } else if target > nums[mid] {
+            left = mid;
         } else {
-            // target in smaller range
-            if target < pivot {
-                left = mid;
-            } else if target > nums[mid] {
-                left = mid;
-            } else {
-                right = mid;
-            }
+            right = mid;
         }
     }
 }

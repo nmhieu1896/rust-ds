@@ -7,12 +7,12 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
 
     loop {
         let mid = (left + right) / 2;
+        //in case right - left <=1, left == mid, so dont need to check left
         if target == nums[mid] {
             return mid as i32;
-        } else if target == nums[left] {
-            return left as i32;
         } else if target == nums[right] {
             return right as i32;
+        // exhaustive, mid and right is both not target
         } else if right - left <= 1 {
             return -1;
         }
@@ -63,6 +63,12 @@ mod test_search_in_rotated_sort {
     fn test4() {
         let nums = vec![7, 8, 0, 1, 2, 3, 4, 5];
         let target = 8;
+        assert_eq!(search(nums, target), 1);
+    }
+    #[test]
+    fn test5() {
+        let nums = vec![1, 3];
+        let target = 3;
         assert_eq!(search(nums, target), 1);
     }
 }

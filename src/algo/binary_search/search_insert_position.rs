@@ -2,26 +2,17 @@
 pub fn search_insert_position(nums: Vec<i32>, target: i32) -> i32 {
     let mut right = nums.len() - 1;
     let mut left = 0;
-    loop {
-        let mid = (right + left) / 2;
-        if right == left || right == left + 1 {
-            if target > nums[right] {
-                return (right + 1) as i32;
-            }
-            if target <= nums[left] {
-                return left as i32;
-            }
-            return (left + 1) as i32;
-        }
 
-        if nums[mid] > target {
+    while left < right {
+        let mid = (right + left) / 2;
+        if nums[mid] >= target {
             right = mid;
         } else if nums[mid] < target {
-            left = mid;
-        } else {
-            return mid as i32;
+            left = mid + 1;
         }
     }
+
+    return if target > nums[left] { left + 1 } else { left } as i32;
 }
 
 #[cfg(test)]

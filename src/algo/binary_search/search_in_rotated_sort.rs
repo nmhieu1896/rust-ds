@@ -5,33 +5,39 @@ pub fn search(nums: Vec<i32>, target: i32) -> i32 {
     let mut right = len;
     let pivot = nums[len];
 
-    loop {
+    while left < right {
         let mid = (left + right) / 2;
-        //in case right - left <=1, left == mid, so dont need to check left
-        if target == nums[mid] {
-            return mid as i32;
-        } else if target == nums[right] {
-            return right as i32;
-        // exhaustive, mid and right is both not target
-        } else if right - left <= 1 {
-            return -1;
-        }
 
         // mid item belong to smaller range
         // meanwhile target in bigger range
         if nums[mid] < pivot && target > pivot {
-            right = mid - 1;
+            right = mid;
         // mid item belong to bigger range
         // meanwhile  target in smaller range
-        } else if nums[mid] > pivot && target < pivot {
+        } else if nums[mid] >= pivot && target <= pivot {
             left = mid + 1;
         //Normal case for binary search
         } else if target > nums[mid] {
             left = mid + 1;
         } else {
-            right = mid - 1;
+            right = mid;
         }
+
+        // consolidate conditions from above.
+        // if (nums[mid] >= pivot && target <= pivot)
+        //     || (target > nums[mid] && (nums[mid] >= pivot || target <= pivot))
+        // {
+        //     left = mid + 1;
+        // } else {
+        //     right = mid;
+        // }
     }
+
+    return if nums[left] == target {
+        left as i32
+    } else {
+        -1
+    };
 }
 
 #[cfg(test)]
@@ -70,5 +76,11 @@ mod test_search_in_rotated_sort {
         let nums = vec![1, 3];
         let target = 3;
         assert_eq!(search(nums, target), 1);
+    }
+    #[test]
+    fn test6() {
+        let nums = vec![5, 1, 3];
+        let target = 5;
+        assert_eq!(search(nums, target), 0);
     }
 }

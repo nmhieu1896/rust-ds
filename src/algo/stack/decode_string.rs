@@ -3,27 +3,6 @@ pub fn decode_string(s: String) -> String {
     let mut stack = Vec::new();
     let mut num = 0;
     let mut str = String::new();
-
-    s.chars().into_iter().for_each(|c| match c {
-        x if x.is_digit(10) => {
-            // num * 10 for handling number that > 10 (test_5)
-            num = num * 10 + x.to_digit(10).unwrap();
-        }
-        x if x == '[' => {
-            stack.push((str.clone(), num));
-            num = 0;
-            str.clear();
-        }
-        x if x == ']' => {
-            let (pre_str, count) = stack.pop().unwrap();
-            str = pre_str + &str.repeat(count as usize)
-        }
-        x => {
-            str.push(x);
-        }
-    });
-
-    str
 }
 
 #[cfg(test)]

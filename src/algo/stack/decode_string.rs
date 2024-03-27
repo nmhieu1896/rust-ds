@@ -1,10 +1,26 @@
 #[allow(dead_code)]
 pub fn decode_string(s: String) -> String {
-    // let mut stack = Vec::new();
-    // let mut num = 0;
-    // let mut str = String::new();
+    let mut stack = Vec::new();
+    let mut num = 0;
+    let mut str = String::new();
 
-    return String::new();
+    s.chars().into_iter().for_each(|char| match char {
+        c if c.is_digit(10) => {
+            num = num * 10 + c.to_digit(10).unwrap();
+        }
+        c if c == '[' => {
+            stack.push((str.clone(), num));
+            str.clear();
+            num = 0;
+        }
+        c if c == ']' => {
+            let (pre_str, mul) = stack.pop().unwrap();
+            str = pre_str + &str.repeat(mul as usize);
+        }
+        c => str.push(c),
+    });
+
+    return str;
 }
 
 #[cfg(test)]

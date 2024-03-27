@@ -2,6 +2,15 @@
 pub fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
     let mut stack = vec![];
     let mut result = vec![0; temperatures.len()];
+
+    for i in 0..temperatures.len() {
+        while stack.len() > 0 && temperatures[i] > temperatures[*stack.last().unwrap()] {
+            let idx = stack.pop().unwrap();
+            result[idx] = (i - idx) as i32;
+        }
+        stack.push(i);
+    }
+    result
 }
 
 #[cfg(test)]

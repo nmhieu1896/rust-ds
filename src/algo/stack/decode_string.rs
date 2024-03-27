@@ -1,8 +1,10 @@
 #[allow(dead_code)]
 pub fn decode_string(s: String) -> String {
-    let mut stack = Vec::new();
-    let mut num = 0;
-    let mut str = String::new();
+    // let mut stack = Vec::new();
+    // let mut num = 0;
+    // let mut str = String::new();
+
+    return String::new();
 }
 
 #[cfg(test)]

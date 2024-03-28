@@ -2,23 +2,29 @@
 pub fn min_remove_to_make_valid(s: String) -> String {
     let mut stack = vec![];
     let mut new_str = String::new();
+    let mut remove_idx = vec![false; s.len()];
 
-    s.chars().into_iter().for_each(|char| match char {
-        c if c == '(' => {
-            stack.push(new_str.clone());
-            new_str.clear();
-        }
+    s.chars().enumerate().for_each(|(i, char)| match char {
+        c if c == '(' => stack.push(i),
         c if c == ')' => {
             if stack.last().is_some() {
-                new_str = stack.pop().unwrap() + "(" + &new_str + ")";
+                stack.pop();
+            } else {
+                remove_idx[i] = true;
             }
         }
-        c => new_str.push(c),
+        _ => {}
     });
 
     while stack.len() > 0 {
-        new_str = stack.pop().unwrap() + &new_str;
+        remove_idx[stack.pop().unwrap()] = true
     }
+
+    s.chars().enumerate().for_each(|(i, char)| {
+        if !remove_idx[i] {
+            new_str.push(char);
+        }
+    });
 
     new_str
 }

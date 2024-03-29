@@ -46,8 +46,8 @@ impl<T> Drop for Rc<T> {
         let inner = unsafe { &*self.inner };
         let c = inner.ref_count.get();
         if c == 1 {
-            drop(inner);
-            drop(self.inner)
+            // drop(inner);
+            // drop(self.inner)
             // let _ = Box::from_raw(self.inner);
         } else {
             inner.ref_count.set(c - 1);

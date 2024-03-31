@@ -15,24 +15,34 @@ pub fn length_of_lis2(nums: Vec<i32>) -> i32 {
 #[allow(dead_code)]
 pub fn length_of_lis(nums: Vec<i32>) -> i32 {
     let mut sub_vec = vec![nums[0]];
-    for i in 1..nums.len() {
-        if nums[i] > *sub_vec.last().unwrap() {
-            sub_vec.push(nums[i]);
+    for n in nums.iter() {
+        if n > sub_vec.last().unwrap() {
+            sub_vec.push(*n);
         } else {
-            let idx = binary_search_left(&mut sub_vec, nums[i]);
-            sub_vec[idx] = nums[i];
+            // -------- use vec.binary_search
+            // if let Err(idx) = sub_vec.binary_search(n) {
+            //     sub_vec[idx] = *n;
+            // }
+            //
+            // -------- use partition point  || this one currently beat 100% users in leetcode for rust.
+            let idx = sub_vec.partition_point(|v| v < n);
+            sub_vec[idx] = *n;
+            // -------- build my own binary search
+            // let idx = binary_search_left(&sub_vec, n);
+            // sub_vec[idx] = *n;
         }
     }
 
     return sub_vec.len() as i32;
 }
 
-pub fn binary_search_left(vec: &mut Vec<i32>, target: i32) -> usize {
+#[allow(dead_code)]
+pub fn binary_search_left(vec: &Vec<i32>, target: &i32) -> usize {
     let mut left = 0;
     let mut right = vec.len() - 1;
     while left < right {
         let mid = (left + right) / 2;
-        if vec[mid] >= target {
+        if vec[mid] >= *target {
             right = mid
         } else {
             left = mid + 1;

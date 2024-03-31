@@ -18,17 +18,27 @@ pub fn length_of_lis(nums: Vec<i32>) -> i32 {
     for i in 1..nums.len() {
         if nums[i] > *sub_vec.last().unwrap() {
             sub_vec.push(nums[i]);
-            continue;
-        }
-        for j in 0..sub_vec.len() {
-            if nums[i] <= sub_vec[j] {
-                sub_vec[j] = nums[i];
-                break;
-            }
+        } else {
+            let idx = binary_search_left(&mut sub_vec, nums[i]);
+            sub_vec[idx] = nums[i];
         }
     }
 
     return sub_vec.len() as i32;
+}
+
+pub fn binary_search_left(vec: &mut Vec<i32>, target: i32) -> usize {
+    let mut left = 0;
+    let mut right = vec.len() - 1;
+    while left < right {
+        let mid = (left + right) / 2;
+        if vec[mid] >= target {
+            right = mid
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
 }
 
 #[cfg(test)]

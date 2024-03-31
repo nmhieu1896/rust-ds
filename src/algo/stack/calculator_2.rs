@@ -6,7 +6,7 @@ enum Mod {
 #[derive(Debug)]
 enum StackItem {
     Value(i32),
-    Operand((), Mod),
+    Operand(Mod),
 }
 
 #[allow(dead_code)]
@@ -37,7 +37,7 @@ pub fn calculate(s: String) -> i32 {
                 curr_mod = Mod::Neg;
             }
             c if c == '(' => {
-                stack.push(StackItem::Operand((), curr_mod.clone()));
+                stack.push(StackItem::Operand(curr_mod.clone()));
                 curr_mod = Mod::Add;
             }
             c if c == ')' => loop {
@@ -45,7 +45,7 @@ pub fn calculate(s: String) -> i32 {
                 let item = stack.pop().unwrap();
                 match item {
                     StackItem::Value(val) => match stack.last().unwrap() {
-                        StackItem::Operand(_, outer_mod) => {
+                        StackItem::Operand(outer_mod) => {
                             if *outer_mod == Mod::Neg {
                                 stack.pop().unwrap();
                                 stack.push(StackItem::Value(val * (-1)));

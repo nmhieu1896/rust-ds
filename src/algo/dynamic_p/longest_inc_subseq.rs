@@ -1,7 +1,6 @@
 #[allow(dead_code)]
-pub fn length_of_lis(nums: Vec<i32>) -> i32 {
-    let nums_len = nums.len();
-    let mut dp = vec![1; nums_len];
+pub fn length_of_lis2(nums: Vec<i32>) -> i32 {
+    let mut dp = vec![1; nums.len()];
     for i in 0..nums.len() {
         for j in 0..i {
             if nums[i] > nums[j] {
@@ -11,6 +10,25 @@ pub fn length_of_lis(nums: Vec<i32>) -> i32 {
     }
 
     return *dp.iter().max().unwrap_or(&1);
+}
+
+#[allow(dead_code)]
+pub fn length_of_lis(nums: Vec<i32>) -> i32 {
+    let mut sub_vec = vec![nums[0]];
+    for i in 1..nums.len() {
+        if nums[i] > *sub_vec.last().unwrap() {
+            sub_vec.push(nums[i]);
+            continue;
+        }
+        for j in 0..sub_vec.len() {
+            if nums[i] <= sub_vec[j] {
+                sub_vec[j] = nums[i];
+                break;
+            }
+        }
+    }
+
+    return sub_vec.len() as i32;
 }
 
 #[cfg(test)]

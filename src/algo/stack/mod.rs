@@ -5,3 +5,4 @@ mod decode_string;
 mod min_remove_to_valid_par;
 mod min_stack;
 mod min_swap_to_valid;
+mod trapping_water;

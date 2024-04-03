@@ -1,81 +1,82 @@
 #[allow(dead_code)]
 pub fn search_range(nums: Vec<i32>, target: i32) -> Vec<i32> {
-    if nums.len() == 0 {
-        return vec![-1, -1];
-    }
-    if nums.len() == 1 {
-        if target == nums[0] {
-            return vec![0, 0];
-        }
-        return vec![-1, -1];
-    }
-    let len = nums.len() - 1;
-    let mut left = 0;
-    let mut right = len;
-    let mut start = 0;
-    let mut end = 0;
+    return vec![nums[0], target];
+    // if nums.len() == 0 {
+    //     return vec![-1, -1];
+    // }
+    // if nums.len() == 1 {
+    //     if target == nums[0] {
+    //         return vec![0, 0];
+    //     }
+    //     return vec![-1, -1];
+    // }
+    // let len = nums.len() - 1;
+    // let mut left = 0;
+    // let mut right = len;
+    // let mut startt = 0;
+    // let mut end = 0;
 
-    loop {
-        if right - left <= 1 {
-            if nums[right] == target && nums[left] != target {
-                return vec![right as i32, right as i32];
-            }
-            if nums[left] == target && nums[right] != target {
-                return vec![left as i32, left as i32];
-            }
-            if nums[left] == target && nums[right] == target {
-                return vec![left as i32, right as i32];
-            }
+    // loop {
+    //     if right - left <= 1 {
+    //         if nums[right] == target && nums[left] != target {
+    //             return vec![right as i32, right as i32];
+    //         }
+    //         if nums[left] == target && nums[right] != target {
+    //             return vec![left as i32, left as i32];
+    //         }
+    //         if nums[left] == target && nums[right] == target {
+    //             return vec![left as i32, right as i32];
+    //         }
 
-            return vec![-1, -1];
-        }
-        let mid = (left + right) / 2;
-        println!("left:{left} | right:{right} | mid:{mid}");
-        if nums[mid] < target {
-            left = mid + 1;
-        } else if nums[mid] > target {
-            right = mid - 1;
-            //target == mid
-        } else {
-            end = mid;
-            start = mid;
-            break;
-        }
-    }
-    loop {
-        let mid = (left + start) / 2;
-        if (start == 0 && nums[start] == target)
-            || (nums[start] == target && nums[start - 1] < target)
-        {
-            break;
-        }
-        if (mid == 0 && nums[mid] == target) || (nums[mid] == target && nums[mid - 1] < target) {
-            start = mid;
-            break;
-        }
-        if nums[mid] >= target {
-            start = mid - 1;
-        } else {
-            left = mid + 1;
-        }
-    }
-    loop {
-        let mid = (end + right) / 2;
-        if (end == len && nums[end] == target) || (nums[end] == target && nums[end + 1] > target) {
-            break;
-        }
-        if (mid == len && nums[mid] == target) || (nums[mid] == target && nums[mid + 1] > target) {
-            end = mid;
-            break;
-        }
-        if nums[mid] <= target {
-            end = mid + 1;
-        } else {
-            right = mid - 1;
-        }
-    }
+    //         return vec![-1, -1];
+    //     }
+    //     let mid = (left + right) / 2;
+    //     println!("left:{left} | right:{right} | mid:{mid}");
+    //     if nums[mid] < target {
+    //         left = mid + 1;
+    //     } else if nums[mid] > target {
+    //         right = mid - 1;
+    //         //target == mid
+    //     } else {
+    //         end = mid;
+    //         startt = mid;
+    //         break;
+    //     }
+    // }
+    // loop {
+    //     let mid = (left + startt) / 2;
+    //     if (startt == 0 && nums[startt] == target)
+    //         || (nums[startt] == target && nums[startt - 1] < target)
+    //     {
+    //         break;
+    //     }
+    //     if (mid == 0 && nums[mid] == target) || (nums[mid] == target && nums[mid - 1] < target) {
+    //         startt = mid;
+    //         break;
+    //     }
+    //     if nums[mid] >= target {
+    //         startt = mid - 1;
+    //     } else {
+    //         left = mid + 1;
+    //     }
+    // }
+    // loop {
+    //     let mid = (end + right) / 2;
+    //     if (end == len && nums[end] == target) || (nums[end] == target && nums[end + 1] > target) {
+    //         break;
+    //     }
+    //     if (mid == len && nums[mid] == target) || (nums[mid] == target && nums[mid + 1] > target) {
+    //         end = mid;
+    //         break;
+    //     }
+    //     if nums[mid] <= target {
+    //         end = mid + 1;
+    //     } else {
+    //         right = mid - 1;
+    //     }
+    // }
 
-    return vec![start as i32, end as i32];
+    // return vec![startt as i32, end as i32];
 }
 
 #[cfg(test)]

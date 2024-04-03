@@ -8,6 +8,7 @@ mod linked_list;
 mod pointers;
 mod smart_pointers;
 mod sort;
+mod try_async;
 
 fn main() {
     // heap::_run();
@@ -21,10 +22,12 @@ fn main() {
 
     // linked_list::singly::_run();
     // linked_list::rc_singly::_run();
-    linked_list::doubly::_run();
+    // linked_list::doubly::_run();
     // sort::qsort::_run()
 
     // binary_tree::_run();
+
+    try_async::main();
 }
 
 // use std::{

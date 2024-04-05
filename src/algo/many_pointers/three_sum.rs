@@ -1,55 +1,34 @@
 #[allow(dead_code)]
 pub fn three_sum(numbers: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
-    if numbers.len() < 3 {
-        return vec![];
-    }
-    let mut nums = numbers.clone();
-    nums.sort();
-    let mut res: Vec<Vec<i32>> = vec![];
-    // let mut left = 0;
-    // let mut right = numbers.len() - 1;
-    // let mut mid = 0;
-    // let mut checked_right = right;
-
-    // while left >= right - 2 {
-    //     if nums[left] + nums[right - 1] + nums[right] < target {
-    //         left += 1;
-    //         checked_right -= 1;
-    //         right = checked_right;
-    //         continue;
-    //     }
-
-    //     mid = left + 1;
-    //     while mid < right - 1 && nums[left] + nums[mid] + nums[right] < target {
-    //         mid += 1;
-    //     }
-    //     if nums[left] + nums[mid] + nums[right] == target {
-    //         res.push(vec![nums[left], nums[mid], nums[right]]);
-    //     }
-    //     right = right - 1;
-    // }
-    for left in 0..nums.len() - 2 {
-        if left > 0 && nums[left] == nums[left - 1] {
-            break;
+    let mut numbers = numbers;
+    numbers.sort();
+    let mut res = vec![];
+    for i in 0..numbers.len() {
+        if i > 0 && numbers[i] == numbers[i - 1] {
+            continue;
         }
+        let mut left = i + 1;
         let mut right = numbers.len() - 1;
-        while right >= 2 && left <= right - 2 {
-            if nums.get(right) == nums.get(right + 1) {
+        while left < right {
+            let sum = numbers[i] + numbers[left] + numbers[right];
+            if sum == target {
+                res.push(vec![numbers[i], numbers[left], numbers[right]]);
+                while left < right && numbers[left] == numbers[left + 1] {
+                    left += 1;
+                }
+                while left < right && numbers[right] == numbers[right - 1] {
+                    right -= 1;
+                }
+                left += 1;
                 right -= 1;
-                continue;
+            } else if sum < target {
+                left += 1;
+            } else {
+                right -= 1;
             }
-            for mid in left + 1..right {
-                if mid > left + 1 && nums.get(mid) == nums.get(mid - 1) {
-                    continue;
-                }
-                if nums[left] + nums[mid] + nums[right] == target {
-                    res.push(vec![nums[left], nums[mid], nums[right]]);
-                }
-            }
-            right -= 1;
         }
     }
-    return res;
+    res
 }
 
 #[cfg(test)]

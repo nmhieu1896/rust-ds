@@ -1,1 +1,1 @@
-mod longest_substr_at_most_two_distinct_char;
+mod longest_substr_at_most_k_distinct_char;

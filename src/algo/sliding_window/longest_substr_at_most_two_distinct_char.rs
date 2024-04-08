@@ -1,30 +1,31 @@
+use std::collections::HashMap;
+
 #[allow(dead_code)]
 pub fn length_of_longest_substring_two_distinct(s: String) -> i32 {
     let mut max = 0;
-    let mut vec = vec![];
-    let mut break_point = (' ', 0);
-    let mut from = 0;
+    let mut map: HashMap<char, usize> = HashMap::new();
+    let mut left = 0;
+    let mut right = 0;
 
     s.chars().enumerate().for_each(|(idx, c)| {
-        if vec.len() == 0 || (vec.len() == 1 && c != vec[0]) {
-            vec.push(c);
-            max = idx + 1;
-        } else if vec.contains(&c) {
-            if (idx + 1 - from) > max {
-                max = idx + 1 - from;
-            }
+        if map.contains_key(&c) || map.keys().len() < 2 {
+            map.remove(&c);
+            map.insert(c, idx);
+            right = idx;
+            max = max.max(right - left + 1);
         } else {
-            if break_point.0 == vec[0] {
-                vec[1] = c
-            } else {
-                vec[0] = c
+            let mut min_v = idx;
+            let mut min_k = ' ';
+            for (&k, &v) in &map {
+                if v < min_v {
+                    min_v = v;
+                    min_k = k;
+                }
             }
 
-            from = break_point.1;
-        }
-
-        if c != break_point.0 {
-            break_point = (c, idx);
+            left = *map.values().min().unwrap() + 1;
+            map.remove(&min_k);
+            map.insert(c, idx);
         }
     });
 
@@ -61,5 +62,11 @@ mod tests {
         let s = "abbbaaaaccccc".to_string();
         let res = length_of_longest_substring_two_distinct(s);
         assert_eq!(res, 9);
+    }
+    #[test]
+    fn test5() {
+        let s = "ababacccccc".to_string();
+        let res = length_of_longest_substring_two_distinct(s);
+        assert_eq!(res, 7);
     }
 }

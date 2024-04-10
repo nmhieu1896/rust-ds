@@ -1,2 +1,3 @@
+mod k_substr_without_rep_chars;
 mod longest_substr_at_most_k_distinct_char;
 mod max_consecutive_ones;

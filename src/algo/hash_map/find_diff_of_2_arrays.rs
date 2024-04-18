@@ -9,9 +9,9 @@ pub fn find_difference(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<Vec<i32>> {
         map.insert(num, 1);
     }
     for num in nums2 {
-        if let Some(v) = map.get(&num) {
+        if let Some(v) = map.get_mut(&num) {
             if v == &1 {
-                map.insert(num, 3);
+                *v = 3
             }
         } else {
             map.insert(num, 2);

@@ -4,21 +4,15 @@ pub fn equal_pairs(grid: Vec<Vec<i32>>) -> i32 {
     let mut map = HashMap::new();
     let mut count = 0;
     for v in grid.iter() {
-        let mut k = String::new();
-        v.iter().for_each(|x| {
-            k.push_str(&x.to_string());
-            k.push('-');
-        });
-        *map.entry(k).or_insert(0) += 1;
+        *map.entry(v).or_insert(0) += 1;
     }
 
     for i in 0..grid.len() {
-        let mut k = String::new();
+        let mut v = Vec::with_capacity(grid.len());
         for j in 0..grid.len() {
-            k.push_str(&grid[j][i].to_string());
-            k.push('-');
+            v.push(grid[j][i]);
         }
-        if let Some(inc) = map.get(&k) {
+        if let Some(inc) = map.get(&v) {
             count += inc;
         }
     }

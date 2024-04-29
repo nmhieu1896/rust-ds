@@ -5,6 +5,7 @@ mod fenwick_tree;
 mod hash;
 mod heap;
 mod linked_list;
+mod parser;
 mod pointers;
 mod smart_pointers;
 mod sort;

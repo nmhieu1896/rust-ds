@@ -17,7 +17,7 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                     if next_c.is_digit(10) || next_c == '.' {
                         new_str.push(next_c);
                     } else {
-                        break_point = Some(i + 1);
+                        break_point = Some(i);
                         break;
                     }
                 } else {
@@ -77,27 +77,38 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                 return (Json::Boolean(false), Some(&str[5..]));
             }
         }
-        // if c == '[' {
-        //     let mut vec = Vec::new();
-        //     loop {
-        //         let next_c = iter_str.next().unwrap();
-        //         if next_c == ']' {
-        //             break;
-        //         }
-        //         if next_c == ',' {
-        //             continue;
-        //         }
-        //         let json = parser(&next_c.to_string());
-        //         vec.push(json);
-        //     }
-        //     return Json::Array(vec);
-        // }
+        if c == '[' {
+            let mut vec = Vec::new();
+            let mut str = Some(str);
+            loop {
+                let (json_value, new_str) = parser(&str.unwrap()[1..]);
+                str = new_str;
+                vec.push(json_value);
+                let (i, next_c) = new_str.unwrap().chars().enumerate().next().unwrap();
+                if next_c == ']' {
+                    if iter_str.next().is_some() {
+                        break_point = Some(i + 1);
+                    } else {
+                        break_point = None;
+                    }
+                    break;
+                }
+            }
+            return (
+                Json::Array(vec),
+                if break_point.is_some() {
+                    Some(&str.unwrap()[break_point.unwrap()..])
+                } else {
+                    None
+                },
+            );
+        }
     }
 }
 
 #[derive(Debug, PartialEq)]
 enum Json {
-    Object(HashMap<String, Box<Json>>),
+    Object(HashMap<String, Json>),
     Array(Vec<Json>),
     Number(f64),
     String(String),
@@ -127,15 +138,28 @@ mod test {
         assert_eq!(parser(str2).0, Json::Boolean(false));
     }
 
-    // #[test]
-    // fn test_parser4() {
-    //     let str1 = r#"[true,false,1024,"Hello world"]"#;
-    //     let vec = vec![
-    //         Json::Boolean(true),
-    //         Json::Boolean(false),
-    //         Json::Number(1024 as f64),
-    //         Json::String("Hello world".to_string()),
-    //     ];
-    //     assert_eq!(parser(str1).0, Json::Array(vec));
-    // }
+    #[test]
+    fn test_parser4() {
+        let str1 = r#"[true,false,1024,"Hello world"]"#;
+        let vec = vec![
+            Json::Boolean(true),
+            Json::Boolean(false),
+            Json::Number(1024 as f64),
+            Json::String("Hello world".to_string()),
+        ];
+        assert_eq!(parser(str1).0, Json::Array(vec));
+    }
+    #[test]
+    fn test_parser5() {
+        let str1 = r#"[true,false,[1024,"Hello world"]]"#;
+        let vec = vec![
+            Json::Boolean(true),
+            Json::Boolean(false),
+            Json::Array(vec![
+                Json::Number(1024 as f64),
+                Json::String("Hello world".to_string()),
+            ]),
+        ];
+        assert_eq!(parser(str1).0, Json::Array(vec));
+    }
 }

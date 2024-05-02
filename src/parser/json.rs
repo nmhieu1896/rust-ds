@@ -37,7 +37,18 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                     break;
                 } else {
                     let (i, next_c) = next_c.unwrap();
-                    if next_c != '"' {
+                    if next_c == '\\' {
+                        let after_slash = iter_str.next().unwrap().1;
+                        if after_slash == 'n'
+                            || after_slash == 't'
+                            || after_slash == 'r'
+                            || after_slash == 'b'
+                            || after_slash == 'f'
+                        {
+                            new_str.push(next_c);
+                        }
+                        new_str.push(after_slash);
+                    } else if next_c != '"' {
                         new_str.push(next_c);
                     } else {
                         break_point = Some(i + 1);
@@ -118,6 +129,41 @@ fn parser(str: &str) -> (Json, Option<&str>) {
             return (Json::None, Some(str));
         } else if c == ' ' {
             continue;
+        } else if c == '{' {
+            let mut map = HashMap::new();
+            let mut str = Some(&str[1..]);
+            'outer: loop {
+                let (json_key, new_str) = parser(&str.unwrap());
+                for (idx, c) in new_str.unwrap().chars().enumerate() {
+                    if c != ':' && c != ' ' {
+                        str = Some(&new_str.unwrap()[idx..]);
+                        break;
+                    }
+                }
+                // println!("{:?}--{:?}--{:?}", map, json_key, new_str);
+                let (val, new_str) = parser(&str.unwrap());
+                if let Json::String(key) = json_key {
+                    map.insert(key, val);
+                }
+                for (idx, c) in new_str.unwrap().chars().enumerate() {
+                    if c == '}' {
+                        str = new_str;
+                        break_point = Some(idx + 1);
+                        break 'outer;
+                    }
+                    if c != ' ' && c != ',' {
+                        str = Some(&new_str.unwrap()[idx..]);
+                        break;
+                    }
+                }
+            }
+            return (
+                Json::Object(map),
+                get_slice_from_breakpoint(str.unwrap(), break_point),
+            );
+        } else if c == '}' {
+            //Handling {} case
+            return (Json::None, Some(str));
         } else {
             panic!("Unexpected character: {}", c);
         }
@@ -151,6 +197,11 @@ mod test {
     fn test_parser1() {
         let str = r#""Hello world""#;
         assert_eq!(parser(str).0, Json::String("Hello world".to_string()));
+        let str = r#""\nHello\" wor\'ld""#;
+        assert_eq!(
+            parser(str).0,
+            Json::String("\\nHello\" wor\'ld".to_string())
+        );
     }
     #[test]
     fn test_parser2() {
@@ -193,5 +244,41 @@ mod test {
             ]),
         ];
         assert_eq!(parser(str1).0, Json::Array(vec));
+    }
+
+    #[test]
+    fn test_parser6() {
+        let str1 = r#"{"key1": "value1", "key2": 1024, "key3": true, "key4": null, "key5": {}}"#;
+        let mut map = HashMap::new();
+        map.insert("key1".to_string(), Json::String("value1".to_string()));
+        map.insert("key2".to_string(), Json::Number(1024 as f64));
+        map.insert("key3".to_string(), Json::Boolean(true));
+        map.insert("key4".to_string(), Json::Null);
+        map.insert("key5".to_string(), Json::Object(HashMap::new()));
+        assert_eq!(parser(str1).0, Json::Object(map));
+    }
+
+    #[test]
+    fn test_parser7() {
+        //test with all type of json enum
+        let str1 = r#"{"key1": "value1", "key2": 1024, "key3": true, "key4": null, "key5": {}, "key6": [], "key7": [true, false, 1024 ,{}, "Hello world"]}"#;
+        let mut map = HashMap::new();
+        map.insert("key1".to_string(), Json::String("value1".to_string()));
+        map.insert("key2".to_string(), Json::Number(1024 as f64));
+        map.insert("key3".to_string(), Json::Boolean(true));
+        map.insert("key4".to_string(), Json::Null);
+        map.insert("key5".to_string(), Json::Object(HashMap::new()));
+        map.insert("key6".to_string(), Json::Array(vec![]));
+        map.insert(
+            "key7".to_string(),
+            Json::Array(vec![
+                Json::Boolean(true),
+                Json::Boolean(false),
+                Json::Number(1024 as f64),
+                Json::Object(HashMap::new()),
+                Json::String("Hello world".to_string()),
+            ]),
+        );
+        assert_eq!(parser(str1).0, Json::Object(map));
     }
 }

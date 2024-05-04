@@ -1,36 +1,20 @@
-use std::collections::HashMap;
 #[allow(dead_code)]
 pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
-    let mut map: HashMap<i32, i32> = HashMap::new();
-    let res = dp(&coins, amount, &mut map);
-    if res == i32::MAX {
-        return -1;
-    }
-    return res;
-}
+    let iter = coins.iter().map(|&x| x as usize);
+    let amount = amount as usize;
+    let mut map = vec![amount + 1; amount + 1];
+    map[0] = 0;
 
-pub fn dp(coins: &Vec<i32>, amount: i32, map: &mut HashMap<i32, i32>) -> i32 {
-    if map.contains_key(&amount) {
-        return map[&amount];
-    }
-    if amount == 0 {
-        return 0;
-    }
-    if amount < 0 {
-        return -1;
-    }
-    let mut min_val = i32::MAX;
-
-    coins.iter().for_each(|&coin| {
-        if amount >= coin {
-            let res = dp(coins, amount - coin, map);
-            if res >= 0 && res < i32::MAX {
-                min_val = min_val.min(1 + res);
-            }
+    for coin in iter {
+        for i in coin..=amount {
+            map[i] = map[i].min(map[i - coin] + 1);
         }
-    });
-    map.insert(amount, min_val);
-    return min_val;
+    }
+    if map[amount] > amount {
+        -1
+    } else {
+        map[amount] as i32
+    }
 }
 
 #[cfg(test)]

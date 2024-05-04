@@ -1,13 +1,18 @@
+use std::collections::HashMap;
 #[allow(dead_code)]
 pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
-    let res = dp(&coins, amount);
+    let mut map: HashMap<i32, i32> = HashMap::new();
+    let res = dp(&coins, amount, &mut map);
     if res == i32::MAX {
         return -1;
     }
     return res;
 }
 
-pub fn dp(coins: &Vec<i32>, amount: i32) -> i32 {
+pub fn dp(coins: &Vec<i32>, amount: i32, map: &mut HashMap<i32, i32>) -> i32 {
+    if map.contains_key(&amount) {
+        return map[&amount];
+    }
     if amount == 0 {
         return 0;
     }
@@ -18,12 +23,13 @@ pub fn dp(coins: &Vec<i32>, amount: i32) -> i32 {
 
     coins.iter().for_each(|&coin| {
         if amount >= coin {
-            let res = dp(coins, amount - coin);
+            let res = dp(coins, amount - coin, map);
             if res >= 0 && res < i32::MAX {
                 min_val = min_val.min(1 + res);
             }
         }
     });
+    map.insert(amount, min_val);
     return min_val;
 }
 

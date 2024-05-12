@@ -1,2 +1,2 @@
 mod happy_num;
-mod pow_of_4;
+mod sum_of_digit_base_k;

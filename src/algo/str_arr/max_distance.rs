@@ -7,16 +7,8 @@ pub fn max_distance(arrays: Vec<Vec<i32>>) -> i32 {
         if max > i32::MIN && min < i32::MAX {
             dist = dist.max(arr[arr.len() - 1] - min).max(max - arr[0]);
         }
-        // if arr[arr.len() - 1] > max {
-        //     max = arr[arr.len() - 1];
-        //     // dist = dist.max(arr[arr.len() - 1] - min);
-        //   } else if arr[0] < min {
-        //     // dist = dist.max(max - arr[0]);
-        //     min = arr[0];
-        //   }
         max = max.max(arr[arr.len() - 1]);
         min = min.min(arr[0]);
-        // dist = dist.max(max - min);
     });
     return dist;
 }

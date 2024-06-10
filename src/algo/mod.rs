@@ -1,6 +1,7 @@
 mod binary_search;
 mod dynamic_p;
 mod hash_map;
+mod linked_list;
 mod many_pointers;
 mod recursive;
 mod sliding_window;

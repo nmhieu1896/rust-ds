@@ -1,8 +1,10 @@
+mod longest_consecutive_seq;
+
 use std::{cell::RefCell, rc::Rc};
 
 #[allow(dead_code)]
-#[derive(Debug, Clone)]
-struct TreeNode {
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TreeNode {
     val: i32,
     left: Option<TreeNodeRef>,
     right: Option<TreeNodeRef>,

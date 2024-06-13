@@ -1,4 +1,5 @@
 mod binary_search;
+mod binary_tree;
 mod dynamic_p;
 mod hash_map;
 mod linked_list;

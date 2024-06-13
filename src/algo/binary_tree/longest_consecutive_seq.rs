@@ -1,4 +1,4 @@
-use super::TreeNode;
+use super::binary_search_tree::TreeNode;
 use std::cell::RefCell;
 use std::rc::Rc;
 

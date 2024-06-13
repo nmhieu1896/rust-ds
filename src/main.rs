@@ -1,5 +1,4 @@
 mod algo;
-mod binary_tree;
 mod bit_wise;
 mod fenwick_tree;
 mod hash;

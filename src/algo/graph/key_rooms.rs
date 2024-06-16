@@ -1,4 +1,6 @@
+#[allow(dead_code)]
 struct Solution;
+#[allow(dead_code)]
 impl Solution {
     pub fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
         let n = rooms.len();

@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn find_disappeared_numbers(nums: Vec<i32>) -> Vec<i32> {
     let mut res = vec![];
     let mut nums = nums;

@@ -6,12 +6,15 @@ pub struct ListNode {
 }
 
 impl ListNode {
+    #[allow(dead_code)]
     #[inline]
     fn new(val: i32) -> Self {
         ListNode { next: None, val }
     }
 }
+#[allow(dead_code)]
 struct Solution;
+#[allow(dead_code)]
 impl Solution {
     pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut prev = None;

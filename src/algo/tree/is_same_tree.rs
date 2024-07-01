@@ -9,6 +9,7 @@ pub struct TreeNode {
     pub right: Option<Rc<RefCell<TreeNode>>>,
 }
 
+#[allow(dead_code)]
 impl TreeNode {
     #[inline]
     pub fn new(val: i32) -> Self {
@@ -22,7 +23,7 @@ impl TreeNode {
 
 #[allow(dead_code)]
 struct Solution {}
-
+#[allow(dead_code)]
 impl Solution {
     pub fn is_same_tree(
         p: Option<Rc<RefCell<TreeNode>>>,

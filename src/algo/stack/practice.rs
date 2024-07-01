@@ -1,5 +1,6 @@
 use std::collections::VecDeque;
 
+#[allow(dead_code)]
 struct RecentCounter {
     pub deque: VecDeque<i32>,
 }
@@ -8,6 +9,7 @@ struct RecentCounter {
  * `&self` means the method takes an immutable reference.
  * If you need a mutable reference, change it to `&mut self` instead.
  */
+#[allow(dead_code)]
 impl RecentCounter {
     fn new() -> Self {
         RecentCounter {

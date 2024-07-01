@@ -6,7 +6,7 @@ fn parser(str: &str) -> (Json, Option<&str>) {
     loop {
         let (i, c) = iter_str.next().unwrap();
         let mut new_str = String::new();
-        let mut break_point: Option<usize> = None;
+        let mut _break_point: Option<usize> = None;
 
         if c.is_digit(10) {
             new_str.push(c);
@@ -17,23 +17,23 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                     if next_c.is_digit(10) || next_c == '.' {
                         new_str.push(next_c);
                     } else {
-                        break_point = Some(i);
+                        _break_point = Some(i);
                         break;
                     }
                 } else {
-                    break_point = None;
+                    _break_point = None;
                     break;
                 }
             }
             return (
                 Json::Number(new_str.parse::<f64>().unwrap()),
-                get_slice_from_breakpoint(str, break_point),
+                get_slice_from_breakpoint(str, _break_point),
             );
         } else if c == '"' {
             loop {
                 let next_c = iter_str.next();
                 if next_c.is_none() {
-                    break_point = None;
+                    _break_point = None;
                     break;
                 } else {
                     let (i, next_c) = next_c.unwrap();
@@ -51,14 +51,14 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                     } else if next_c != '"' {
                         new_str.push(next_c);
                     } else {
-                        break_point = Some(i + 1);
+                        _break_point = Some(i + 1);
                         break;
                     }
                 }
             }
             return (
                 Json::String(new_str.to_string()),
-                get_slice_from_breakpoint(str, break_point),
+                get_slice_from_breakpoint(str, _break_point),
             );
         } else if c == 't' {
             new_str.push(c);
@@ -106,9 +106,9 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                     if c == ']' {
                         str = new_str;
                         if iter_new_str.next().is_some() {
-                            break_point = Some(1);
+                            _break_point = Some(1);
                         } else {
-                            break_point = None;
+                            _break_point = None;
                         }
                         break 'outer;
                     }
@@ -122,7 +122,7 @@ fn parser(str: &str) -> (Json, Option<&str>) {
 
             return (
                 Json::Array(vec),
-                get_slice_from_breakpoint(str.unwrap(), break_point),
+                get_slice_from_breakpoint(str.unwrap(), _break_point),
             );
         } else if c == ']' {
             //Handling [] case
@@ -148,7 +148,7 @@ fn parser(str: &str) -> (Json, Option<&str>) {
                 for (idx, c) in new_str.unwrap().chars().enumerate() {
                     if c == '}' {
                         str = new_str;
-                        break_point = Some(idx + 1);
+                        _break_point = Some(idx + 1);
                         break 'outer;
                     }
                     if c != ' ' && c != ',' {
@@ -159,7 +159,7 @@ fn parser(str: &str) -> (Json, Option<&str>) {
             }
             return (
                 Json::Object(map),
-                get_slice_from_breakpoint(str.unwrap(), break_point),
+                get_slice_from_breakpoint(str.unwrap(), _break_point),
             );
         } else if c == '}' {
             //Handling {} case
@@ -170,11 +170,11 @@ fn parser(str: &str) -> (Json, Option<&str>) {
     }
 }
 
-pub fn get_slice_from_breakpoint(str: &str, break_point: Option<usize>) -> Option<&str> {
-    if break_point.is_none() {
+pub fn get_slice_from_breakpoint(str: &str, _break_point: Option<usize>) -> Option<&str> {
+    if _break_point.is_none() {
         None
     } else {
-        Some(&str[break_point.unwrap()..])
+        Some(&str[_break_point.unwrap()..])
     }
 }
 

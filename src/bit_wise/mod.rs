@@ -11,3 +11,20 @@ pub fn _run() {
     number = (number - 1) | number;
     println!("After moving rightmost bit to the right: {}", number);
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test() {
+        let x: u8 = 0b1010_1010;
+        let y = !x;
+        println!("x: {:b}", x);
+        println!("y: {:b}", y);
+        let count = x.count_ones();
+        println!("{}", count); // Outputs: 4
+        let odd = 7;
+        let is_odd = (odd & 1) == 1;
+        println!("{}", is_odd); // Outputs: 3
+    }
+}

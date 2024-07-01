@@ -2,7 +2,9 @@ use super::binary_search_tree::TreeNode;
 use std::cell::RefCell;
 use std::rc::Rc;
 
+#[allow(dead_code)]
 struct Solution;
+#[allow(dead_code)]
 impl Solution {
     pub fn longest_consecutive(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let val = root.as_ref().map(|x| x.borrow().val).unwrap();

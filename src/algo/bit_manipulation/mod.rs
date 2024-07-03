@@ -1,3 +1,5 @@
+mod maximum_req;
+
 pub fn _run() {
     let mut number: i32 = 7;
     let count = number.count_ones();

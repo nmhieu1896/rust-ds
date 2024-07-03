@@ -1,5 +1,6 @@
 mod binary_search;
 mod binary_tree;
+mod bit_manipulation;
 mod dynamic_p;
 mod graph;
 mod hash_map;

@@ -12,3 +12,4 @@ mod stack;
 mod str_arr;
 mod topo_sort;
 mod tree;
+mod trie;

@@ -50,7 +50,6 @@ impl UnionFind {
     pub fn union(&mut self, x: i32, y: i32) -> i32 {
         let x_root = self.find(x as usize);
         let y_root = self.find(y as usize);
-        println!("x_root: {:?}, y_root: {:?}", x_root, y_root);
 
         match x_root >= y_root {
             true if x_root == y_root => return 0,

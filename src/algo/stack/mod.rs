@@ -1,5 +1,6 @@
 mod basic_calculator;
 mod calculator_2;
+mod count_atoms;
 mod daily_temperature;
 mod decode_string;
 mod min_remove_to_valid_par;
